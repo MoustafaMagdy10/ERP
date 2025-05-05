@@ -25,12 +25,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
 
+
     @Override
     protected void doFilterInternal(@SuppressWarnings("null") @NonNull HttpServletRequest request,@SuppressWarnings("null") @NonNull HttpServletResponse response,@SuppressWarnings("null") @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         String jwtToken = null;
         String username = null;
-
+        String path = request.getRequestURI();
         if(authHeader != null && authHeader.startsWith("Bearer ")) {
             jwtToken = authHeader.substring(7);
             username = jwtService.extractUserName(jwtToken);
