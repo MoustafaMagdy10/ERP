@@ -8,6 +8,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @Data
@@ -17,7 +19,17 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        // Add roles as authorities (prefix with ROLE_)
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
+
+            // Add permissions as authorities
+            role.getPermissions().forEach(permission ->
+                    authorities.add(new SimpleGrantedAuthority(permission.getName().toUpperCase())));
+        });
+        return authorities;
     }
 
     @Override

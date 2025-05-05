@@ -3,6 +3,7 @@ package com.erp.inventory.model;
 import jakarta.persistence.*;
 import lombok.*;
 //import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -33,4 +34,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    private boolean active;
+    private LocalDateTime lastLogin;
+
+    @Column(nullable = false)
+    private boolean forcePasswordChange = false;
 }

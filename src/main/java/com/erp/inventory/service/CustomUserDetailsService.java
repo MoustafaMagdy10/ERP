@@ -1,5 +1,6 @@
 package com.erp.inventory.service;
 
+import com.erp.inventory.exception.ForcePasswordChangeException;
 import com.erp.inventory.model.User;
 import com.erp.inventory.model.UserPrincipal;
 import com.erp.inventory.repository.UserRepository;
@@ -23,6 +24,11 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("user not found");
         }
 
+//        if(user.get().isForcePasswordChange()) {
+//            throw new ForcePasswordChangeException("Password change required");
+//        }
         return new UserPrincipal(user.get());
     }
+
+
 }
