@@ -29,6 +29,7 @@ public class UserPrincipal implements UserDetails {
             role.getPermissions().forEach(permission ->
                     authorities.add(new SimpleGrantedAuthority(permission.getName().toUpperCase())));
         });
+
         return authorities;
     }
 

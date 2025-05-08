@@ -18,10 +18,7 @@ import com.erp.inventory.dto.UserRegistrationDTO;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,17 +35,30 @@ public class UserService {
 
     @Transactional
     public UserResponseDTO register(UserRegistrationDTO request) {
-        System.out.println("registering....");
+        System.out.println("Registering new user...");
 
+        // Check if username already exists
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");
         }
 
-        Set<Role> roles = request.getRoles() != null ? request.getRoles().stream()
-                .map(roleName -> roleRepository.findByName(roleName)
-                        .orElseThrow(() -> new RuntimeException("Role not found: " + roleName)))
-                .collect(Collectors.toSet()) : Collections.emptySet();
+        // Fetch roles from DB
+        Set<Role> roles = request.getRoles() != null
+                ? request.getRoles().stream()
+                .map(roleName -> {
+                    Role role = roleRepository.findByName(roleName)
+                            .orElseThrow(() -> new RuntimeException("Role not found: " + roleName));
+                    System.out.println("Found role: " + role.getName());
+                    return role;
+                })
+                .collect(Collectors.toSet())
+                : new HashSet<>(); // Use HashSet instead of emptySet to avoid immutability issues
 
+        // Debug log to verify roles set
+        System.out.println("Roles to assign: " + roles.stream()
+                .map(Role::getName).collect(Collectors.joining(", ")));
+
+        // Build user with encoded password and assigned roles
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -56,19 +66,19 @@ public class UserService {
                 .roles(roles)
                 .build();
 
-        System.out.println("saving....");
+        // Save user
+        System.out.println("Saving user...");
         userRepository.save(user);
-        System.out.println("--saved--");
+        System.out.println("User saved successfully.");
 
-        // null-safe role list mapping
-        List<String> roleNames = Optional.ofNullable(user.getRoles())
-                .orElse(Collections.emptySet())
-                .stream()
+        // Create response DTO
+        List<String> roleNames = roles.stream()
                 .map(Role::getName)
                 .collect(Collectors.toList());
 
         return new UserResponseDTO(user.getUsername(), user.getEmail(), roleNames);
     }
+
 
 
 

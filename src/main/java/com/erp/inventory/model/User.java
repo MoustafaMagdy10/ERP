@@ -27,6 +27,7 @@ public class User {
     @Column(unique = true, nullable = false)
     private String email;
 
+    // todo check user role why is not working
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
