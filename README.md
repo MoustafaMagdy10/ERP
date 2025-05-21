@@ -52,8 +52,24 @@ The project follows a layered architecture:
 
 modules are organized within the `src` directory as follows:
 
-<pre lang="markdown"> ``` ERP/ ├── src/ │ ├── main/ │ │ ├── java/ │ │ │ └── com/ │ │ │ └── moustafamagdy/ │ │ │ └── erp/ │ │ │ ├── controller/ │ │ │ ├── service/ │ │ │ ├── repository/ │ │ │ └── model/ │ │ └── resources/ │ │ ├── application.properties │ │ └── templates/ ├── pom.xml └── README.md ``` </pre>
-
+```
+ERP/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── moustafamagdy/
+│   │   │           └── erp/
+│   │   │               ├── controller/
+│   │   │               ├── service/
+│   │   │               ├── repository/
+│   │   │               └── model/
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       └── templates/
+├── pom.xml
+└── README.md
+```
 ---
 
 
