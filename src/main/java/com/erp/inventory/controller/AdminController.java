@@ -57,10 +57,10 @@ public class AdminController {
         return ResponseEntity.ok(updatedRole);
     }
 
-    @DeleteMapping("delete-role")
+    @DeleteMapping("delete-role/{name}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public  void DeleteRole(@RequestBody @Valid Role role) {
-        adminService.DeleteRole(role);
+    public  void DeleteRole(@PathVariable @NotBlank String name ) {
+        adminService.DeleteRole(name);
     }
 }
 

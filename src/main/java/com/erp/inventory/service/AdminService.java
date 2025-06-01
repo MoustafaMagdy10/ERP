@@ -2,11 +2,14 @@ package com.erp.inventory.service;
 
 import com.erp.inventory.dto.UserCreateRequestDTO;
 import com.erp.inventory.dto.UserResponseDTO;
+import com.erp.inventory.exception.RoleNotFound;
 import com.erp.inventory.exception.UserNotFoundException;
+import com.erp.inventory.model.Product;
 import com.erp.inventory.model.Role;
 import com.erp.inventory.model.User;
 import com.erp.inventory.repository.RoleRepository;
 import com.erp.inventory.repository.UserRepository;
+import com.erp.inventory.repository.ProductRepository;
 import com.erp.inventory.utils.PasswordUtils;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +32,7 @@ import java.util.stream.Collectors;
 public class AdminService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final ProductRepository productRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService ;
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
@@ -83,8 +88,8 @@ public class AdminService {
         return roleRepository.save(role);
     }
 
-    public void DeleteRole(@RequestBody Role role){
-        roleRepository.delete(role);
+    public void DeleteRole(@PathVariable String name){
+        roleRepository.delete(roleRepository.findByName(name).orElseThrow(()->new RoleNotFound("Role Not Found")));
     }
 
     public Role updateRole(@RequestBody Role role){
@@ -94,4 +99,5 @@ public class AdminService {
     public List<Role> getAllRoles(){
         return roleRepository.findAll();
     }
+
 }
