@@ -38,7 +38,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByName(name));
     }
 
-    @PostMapping("/update-product")
+    @PutMapping("/update-product")
     public ResponseEntity<ProductResponseDTO> UpdateProduct(@RequestBody ProductRequestDTO productRequest) {
         return ResponseEntity.ok(productService.updateProduct(productRequest));
     }

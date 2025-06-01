@@ -84,20 +84,4 @@ public class AdminService {
                 .orElseThrow(() -> new UserNotFoundException(username + "does not exist in the database. Please try again with a valid username."));
         userRepository.delete(user);
     }
-    public Role createRole(@RequestBody Role role){
-        return roleRepository.save(role);
-    }
-
-    public void DeleteRole(@PathVariable String name){
-        roleRepository.delete(roleRepository.findByName(name).orElseThrow(()->new RoleNotFound("Role Not Found")));
-    }
-
-    public Role updateRole(@RequestBody Role role){
-        return roleRepository.save(role);
-    }
-
-    public List<Role> getAllRoles(){
-        return roleRepository.findAll();
-    }
-
 }

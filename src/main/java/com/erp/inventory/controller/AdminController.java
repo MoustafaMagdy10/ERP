@@ -17,50 +17,26 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private final AdminService adminService;
-    @PostMapping("create-user")
+    @PostMapping
     public  ResponseEntity<UserResponseDTO> createUser(@RequestBody @Valid UserCreateRequestDTO request) {
         return ResponseEntity.ok(adminService.createUser(request));
     }
 
-    @GetMapping("get-all-users")
+    @GetMapping
     public  ResponseEntity<Iterable<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(adminService.getAllUsers());
     }
-    @GetMapping("get-user-/{username}")
+    @GetMapping("/{username}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
 
     public  ResponseEntity<UserResponseDTO> getUserByName(@PathVariable @Valid String username) {
         return ResponseEntity.ok(adminService.getUserByName(username).get());
     }
-    @DeleteMapping("delete-user-/{username}")
+    @DeleteMapping("/{username}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> deleteUser(@PathVariable @Valid @NotBlank String username) {
         adminService.deleteUser(username);
         return ResponseEntity.noContent().build();
-    }
-    @PostMapping("/roles")
-    public ResponseEntity<Role> createRole(@RequestBody @Valid Role role) {
-        Role createdRole = adminService.createRole(role);
-        return ResponseEntity.ok(createdRole);
-
-    }
-
-    @GetMapping("get-all-roles")
-    public  ResponseEntity<Iterable<Role>> getAllRoles() {
-        return ResponseEntity.ok(adminService.getAllRoles());
-    }
-
-
-    @PutMapping("/roles/{roleName}")
-    public ResponseEntity<Role> updateRole( @RequestBody @Valid Role role) {
-        Role updatedRole = adminService.updateRole(role);
-        return ResponseEntity.ok(updatedRole);
-    }
-
-    @DeleteMapping("delete-role/{name}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public  void DeleteRole(@PathVariable @NotBlank String name ) {
-        adminService.DeleteRole(name);
     }
 }
 
