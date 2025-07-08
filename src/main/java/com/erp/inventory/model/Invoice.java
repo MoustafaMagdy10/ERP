@@ -22,9 +22,6 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private InvoiceType invoiceType;
 
-    @Enumerated(EnumType.STRING)
-    private InvoiceType invoiceStatus;
-
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = true)
     private Client client;

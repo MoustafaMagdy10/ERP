@@ -23,6 +23,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class InvoiceService {
@@ -30,7 +31,6 @@ public class InvoiceService {
     private final InvoiceRepository invoiceRepository;
     private final ProductRepository productRepository;
     private final SupplierRepository supplierRepository;
-    private final SupplierRepository ClientRepository;
     private final ClientRepository clientRepository;
 
 
@@ -57,8 +57,11 @@ public class InvoiceService {
             }
 
             invoice.setSupplier(supplierRepository.findById(dto.getSupplierId()).orElseThrow(()->new IllegalArgumentException("Supplier not found")));
+            System.out.println(invoice.getSupplier().getId());
 
         }
+        System.out.println(dto.getInvoiceType());
+
         List<InvoiceItem> items = new ArrayList<>();
         BigDecimal total = BigDecimal.ZERO;
 
@@ -70,8 +73,12 @@ public class InvoiceService {
             item.setInvoice(invoice);
             item.setProduct(product);
             item.setQuantity(itemDTO.getQuantity());
-            item.setPrice(itemDTO.getPrice());
-
+            if(itemDTO.getPrice()==null){
+                item.setPrice(product.getPrice());
+            }
+            else {
+                item.setPrice(itemDTO.getPrice());
+            }
             BigDecimal itemTotal = itemDTO.getPrice().multiply(BigDecimal.valueOf(itemDTO.getQuantity()));
             total = total.add(itemTotal);
 
