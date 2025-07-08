@@ -5,6 +5,7 @@ import com.erp.inventory.dto.ProductRequestDTO;
 import com.erp.inventory.dto.ProductResponseDTO;
 import com.erp.inventory.exception.ProductNotFound;
 import com.erp.inventory.model.Product;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+
+    @Transactional
     public ProductResponseDTO createProduct(@RequestBody ProductRequestDTO productReq){
 
         Product product = modelMapper.map(productReq, Product.class);
@@ -43,12 +46,14 @@ public class ProductService {
         return modelMapper.map(productRepository.findByName(name).orElseThrow(()-> new ProductNotFound("Product Not Found")),ProductResponseDTO.class);
     }
 
+    @Transactional
     public ProductResponseDTO updateProduct(ProductRequestDTO productRequest) {
         Product product = productRepository.findByName(productRequest.getName()).orElseThrow(()->new ProductNotFound("Product Not Found"));
 
         product.setUpdatedAt(LocalDateTime.now());
         return modelMapper.map(productRepository.save(product),ProductResponseDTO.class);
     }
+
 
     public void deleteProduct(String name) {
         productRepository.delete(productRepository.findByName(name).orElseThrow(()-> new ProductNotFound("Product Not Found")));

@@ -11,6 +11,7 @@ import com.erp.inventory.repository.RoleRepository;
 import com.erp.inventory.repository.UserRepository;
 import com.erp.inventory.repository.ProductRepository;
 import com.erp.inventory.utils.PasswordUtils;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -38,7 +39,7 @@ public class AdminService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     private final ModelMapper modelMapper;
 
-
+    @Transactional
     public UserResponseDTO createUser(UserCreateRequestDTO request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new RuntimeException("Username already exists");

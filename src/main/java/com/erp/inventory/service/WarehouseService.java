@@ -5,6 +5,7 @@ import com.erp.inventory.dto.WarehouseResponseDTO;
 import com.erp.inventory.exception.WarehouseNotFound;
 import com.erp.inventory.model.Warehouse;
 import com.erp.inventory.repository.WarehouseRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class WarehouseService {
     private final WarehouseRepository warehouseRepository;
     private final ModelMapper modelMapper;
 
+    @Transactional
     public WarehouseResponseDTO createWarehouse(WarehouseRequestDTO warehouseDTO) {
         Warehouse warehouse = modelMapper.map(warehouseDTO, Warehouse.class);
         return modelMapper.map(warehouseRepository.save(warehouse), WarehouseResponseDTO.class);
@@ -42,6 +44,7 @@ public class WarehouseService {
         return modelMapper.map(warehouse, WarehouseResponseDTO.class);
     }
 
+    @Transactional
     public WarehouseResponseDTO updateWarehouse(WarehouseRequestDTO warehouseDTO) {
         Warehouse warehouse = warehouseRepository.findByName(warehouseDTO.getName())
                 .orElseThrow(() -> new WarehouseNotFound("Warehouse not found"));

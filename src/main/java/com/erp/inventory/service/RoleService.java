@@ -15,6 +15,8 @@ import java.util.List;
 public class RoleService {
 
     private final RoleRepository roleRepository;
+
+
     public Role createRole(@RequestBody Role role){
         return roleRepository.save(role);
     }
